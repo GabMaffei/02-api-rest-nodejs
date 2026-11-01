@@ -54,3 +54,19 @@ The example configuration uses local SQLite files. No database server or credent
 ## Project status
 
 This repository is a learning project focused on REST routes, persistence, validation, and request-level session handling. The repository includes automated tests for the transaction routes.
+
+## Source guide
+
+| Source | What to inspect |
+| --- | --- |
+| [Application setup](src/app.ts) | Fastify plugins and route registration. |
+| [Transaction routes](src/routes/transactions.ts) | Creation, session-scoped reads, and balance summary. |
+| [Session check](src/middlewares/check-session-id-exists.ts) | Handling of requests without a session cookie. |
+| [Database setup](src/database.ts) | Knex configuration and database connection. |
+| [Environment validation](src/env/index.ts) | Validated database and server configuration. |
+
+## Session workflow
+
+Create a transaction first, then retain the returned `sessionId` cookie for list, detail, and summary requests. An API client that does not preserve cookies will not share that session automatically across separate calls.
+
+This mechanism groups and scopes transactions by a cookie. It does not provide registered user identities, password authentication, or a complete account-based authorization system. Read the route queries alongside the session middleware when evaluating the access boundary.
